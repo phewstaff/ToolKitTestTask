@@ -1,0 +1,20 @@
+{
+ "semi": false,
+ "singleQuote": true,
+ "tabWidth": 2,
+ "printWidth": 100,
+ "trailingComma": "all",
+ "importOrder": [
+  "^react$",
+  "^@apollo/(.*)$",
+  "^@app/(.*)$",
+  "^@entities/(.*)$",
+  "^@features/(.*)$",
+  "^@shared/(.*)$",
+  "^@/(.*)$",
+  "^[./]"
+ ],
+ "importOrderSeparation": true,
+ "importOrderSortSpecifiers": true,
+ "plugins": ["@trivago/prettier-plugin-sort-imports"]
+}
