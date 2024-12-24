@@ -31017,6 +31017,21 @@ export type UserListSuggestion = {
   name?: Maybe<Scalars['String']['output']>;
 };
 
+/** A repository owned by an Enterprise Managed user. */
+export type UserNamespaceRepository = Node & {
+  __typename?: 'UserNamespaceRepository';
+  /** The Node ID of the UserNamespaceRepository object */
+  id: Scalars['ID']['output'];
+  /** The name of the repository. */
+  name: Scalars['String']['output'];
+  /** The repository's name with owner. */
+  nameWithOwner: Scalars['String']['output'];
+  /** The user owner of the repository. */
+  owner: RepositoryOwner;
+  /** The repository owned by an enterprise managed user. */
+  repository?: Maybe<RepositoryInfo>;
+};
+
 /** The user's description of what they're currently doing. */
 export type UserStatus = Node & {
   __typename?: 'UserStatus';
@@ -31397,103 +31412,60 @@ export type WorkflowsParametersInput = {
   workflows: Array<WorkflowFileReferenceInput>;
 };
 
-export type GetViewerReposQueryVariables = Exact<{
-  first: Scalars['Int']['input'];
-}>;
-
-
-export type GetViewerReposQuery = { __typename?: 'Query', viewer: { __typename?: 'User', repositories: { __typename?: 'RepositoryConnection', nodes?: Array<{ __typename: 'Repository', id: string, name: string, description?: string | null, url: any, stargazerCount: number, updatedAt: any, owner: { __typename?: 'Organization', login: string } | { __typename?: 'User', login: string }, primaryLanguage?: { __typename?: 'Language', name: string, color?: string | null } | null } | null> | null } } };
+export type RepositoryFieldsFragment = { __typename?: 'Repository', id: string, name: string, description?: string | null, url: any, stargazerCount: number, updatedAt: any, owner: { __typename?: 'Organization', login: string } | { __typename?: 'User', login: string }, primaryLanguage?: { __typename?: 'Language', name: string, color?: string | null } | null };
 
 export type SearchRepositoriesQueryVariables = Exact<{
   query: Scalars['String']['input'];
   first: Scalars['Int']['input'];
+  after?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type SearchRepositoriesQuery = { __typename?: 'Query', search: { __typename?: 'SearchResultItemConnection', nodes?: Array<{ __typename: 'App' } | { __typename: 'Discussion' } | { __typename: 'Issue' } | { __typename: 'MarketplaceListing' } | { __typename: 'Organization' } | { __typename: 'PullRequest' } | { __typename: 'Repository', id: string, name: string, description?: string | null, url: any, stargazerCount: number, updatedAt: any, owner: { __typename?: 'Organization', login: string } | { __typename?: 'User', login: string }, primaryLanguage?: { __typename?: 'Language', name: string, color?: string | null } | null } | { __typename: 'User' } | null> | null } };
+export type SearchRepositoriesQuery = { __typename?: 'Query', search: { __typename?: 'SearchResultItemConnection', repositoryCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, nodes?: Array<{ __typename: 'App' } | { __typename: 'Discussion' } | { __typename: 'Issue' } | { __typename: 'MarketplaceListing' } | { __typename: 'Organization' } | { __typename: 'PullRequest' } | { __typename: 'Repository', id: string, name: string, description?: string | null, url: any, stargazerCount: number, updatedAt: any, owner: { __typename?: 'Organization', login: string } | { __typename?: 'User', login: string }, primaryLanguage?: { __typename?: 'Language', name: string, color?: string | null } | null } | { __typename: 'User' } | null> | null } };
+
+export type GetViewerRepositoriesQueryVariables = Exact<{
+  first: Scalars['Int']['input'];
+}>;
 
 
-export const GetViewerReposDocument = gql`
-    query GetViewerRepos($first: Int!) {
-  viewer {
-    repositories(first: $first, orderBy: {field: UPDATED_AT, direction: DESC}) {
-      nodes {
-        __typename
-        id
-        name
-        description
-        owner {
-          login
-        }
-        url
-        stargazerCount
-        updatedAt
-        primaryLanguage {
-          name
-          color
-        }
-      }
-    }
+export type GetViewerRepositoriesQuery = { __typename?: 'Query', viewer: { __typename?: 'User', repositories: { __typename?: 'RepositoryConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, nodes?: Array<{ __typename?: 'Repository', id: string, name: string, description?: string | null, url: any, stargazerCount: number, updatedAt: any, owner: { __typename?: 'Organization', login: string } | { __typename?: 'User', login: string }, primaryLanguage?: { __typename?: 'Language', name: string, color?: string | null } | null } | null> | null } } };
+
+export const RepositoryFieldsFragmentDoc = gql`
+    fragment RepositoryFields on Repository {
+  id
+  owner {
+    login
+  }
+  name
+  description
+  url
+  stargazerCount
+  updatedAt
+  primaryLanguage {
+    name
+    color
   }
 }
     `;
-
-/**
- * __useGetViewerReposQuery__
- *
- * To run a query within a React component, call `useGetViewerReposQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetViewerReposQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetViewerReposQuery({
- *   variables: {
- *      first: // value for 'first'
- *   },
- * });
- */
-export function useGetViewerReposQuery(baseOptions: Apollo.QueryHookOptions<GetViewerReposQuery, GetViewerReposQueryVariables> & ({ variables: GetViewerReposQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetViewerReposQuery, GetViewerReposQueryVariables>(GetViewerReposDocument, options);
-      }
-export function useGetViewerReposLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetViewerReposQuery, GetViewerReposQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetViewerReposQuery, GetViewerReposQueryVariables>(GetViewerReposDocument, options);
-        }
-export function useGetViewerReposSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetViewerReposQuery, GetViewerReposQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetViewerReposQuery, GetViewerReposQueryVariables>(GetViewerReposDocument, options);
-        }
-export type GetViewerReposQueryHookResult = ReturnType<typeof useGetViewerReposQuery>;
-export type GetViewerReposLazyQueryHookResult = ReturnType<typeof useGetViewerReposLazyQuery>;
-export type GetViewerReposSuspenseQueryHookResult = ReturnType<typeof useGetViewerReposSuspenseQuery>;
-export type GetViewerReposQueryResult = Apollo.QueryResult<GetViewerReposQuery, GetViewerReposQueryVariables>;
 export const SearchRepositoriesDocument = gql`
-    query SearchRepositories($query: String!, $first: Int!) {
-  search(query: $query, type: REPOSITORY, first: $first) {
+    query SearchRepositories($query: String!, $first: Int!, $after: String) {
+  search(query: $query, type: REPOSITORY, first: $first, after: $after) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
     nodes {
       __typename
       ... on Repository {
-        id
-        name
-        owner {
-          login
-        }
-        description
-        url
-        stargazerCount
-        updatedAt
-        primaryLanguage {
-          name
-          color
-        }
+        ...RepositoryFields
       }
     }
+    repositoryCount
   }
 }
-    `;
+    ${RepositoryFieldsFragmentDoc}`;
 
 /**
  * __useSearchRepositoriesQuery__
@@ -31509,6 +31481,7 @@ export const SearchRepositoriesDocument = gql`
  *   variables: {
  *      query: // value for 'query'
  *      first: // value for 'first'
+ *      after: // value for 'after'
  *   },
  * });
  */
@@ -31528,3 +31501,53 @@ export type SearchRepositoriesQueryHookResult = ReturnType<typeof useSearchRepos
 export type SearchRepositoriesLazyQueryHookResult = ReturnType<typeof useSearchRepositoriesLazyQuery>;
 export type SearchRepositoriesSuspenseQueryHookResult = ReturnType<typeof useSearchRepositoriesSuspenseQuery>;
 export type SearchRepositoriesQueryResult = Apollo.QueryResult<SearchRepositoriesQuery, SearchRepositoriesQueryVariables>;
+export const GetViewerRepositoriesDocument = gql`
+    query GetViewerRepositories($first: Int!) {
+  viewer {
+    repositories(first: $first, orderBy: {field: UPDATED_AT, direction: DESC}) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      nodes {
+        ...RepositoryFields
+      }
+    }
+  }
+}
+    ${RepositoryFieldsFragmentDoc}`;
+
+/**
+ * __useGetViewerRepositoriesQuery__
+ *
+ * To run a query within a React component, call `useGetViewerRepositoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetViewerRepositoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetViewerRepositoriesQuery({
+ *   variables: {
+ *      first: // value for 'first'
+ *   },
+ * });
+ */
+export function useGetViewerRepositoriesQuery(baseOptions: Apollo.QueryHookOptions<GetViewerRepositoriesQuery, GetViewerRepositoriesQueryVariables> & ({ variables: GetViewerRepositoriesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetViewerRepositoriesQuery, GetViewerRepositoriesQueryVariables>(GetViewerRepositoriesDocument, options);
+      }
+export function useGetViewerRepositoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetViewerRepositoriesQuery, GetViewerRepositoriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetViewerRepositoriesQuery, GetViewerRepositoriesQueryVariables>(GetViewerRepositoriesDocument, options);
+        }
+export function useGetViewerRepositoriesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetViewerRepositoriesQuery, GetViewerRepositoriesQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetViewerRepositoriesQuery, GetViewerRepositoriesQueryVariables>(GetViewerRepositoriesDocument, options);
+        }
+export type GetViewerRepositoriesQueryHookResult = ReturnType<typeof useGetViewerRepositoriesQuery>;
+export type GetViewerRepositoriesLazyQueryHookResult = ReturnType<typeof useGetViewerRepositoriesLazyQuery>;
+export type GetViewerRepositoriesSuspenseQueryHookResult = ReturnType<typeof useGetViewerRepositoriesSuspenseQuery>;
+export type GetViewerRepositoriesQueryResult = Apollo.QueryResult<GetViewerRepositoriesQuery, GetViewerRepositoriesQueryVariables>;

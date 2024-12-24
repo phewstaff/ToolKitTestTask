@@ -12,7 +12,7 @@ const config: CodegenConfig = {
       },
     },
   },
-  documents: ['src/**/queries.ts', 'src/**/*.graphql'],
+  documents: ['src/**/*.ts'],
   generates: {
     './src/shared/api/types/graphql.ts': {
       plugins: ['typescript', 'typescript-operations', 'typescript-react-apollo'],
@@ -20,7 +20,12 @@ const config: CodegenConfig = {
         withHooks: true,
         withComponent: false,
         withHOC: false,
-        skipTypename: false,
+      },
+    },
+    './graphql.schema.json': {
+      plugins: ['introspection'],
+      config: {
+        minify: true,
       },
     },
   },

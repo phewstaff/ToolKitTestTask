@@ -43,6 +43,7 @@ export default [
       'vite.config.ts.timestamp-*',
 
       // Generated files
+      '**/types/graphql.ts',
       '**/generated/**',
 
       // Misc
