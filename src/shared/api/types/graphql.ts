@@ -31416,15 +31416,20 @@ export type RepositoryFieldsFragment = { __typename?: 'Repository', id: string, 
 
 export type SearchRepositoriesQueryVariables = Exact<{
   query: Scalars['String']['input'];
-  first: Scalars['Int']['input'];
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
 export type SearchRepositoriesQuery = { __typename?: 'Query', search: { __typename?: 'SearchResultItemConnection', repositoryCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, nodes?: Array<{ __typename: 'App' } | { __typename: 'Discussion' } | { __typename: 'Issue' } | { __typename: 'MarketplaceListing' } | { __typename: 'Organization' } | { __typename: 'PullRequest' } | { __typename: 'Repository', id: string, name: string, description?: string | null, url: any, stargazerCount: number, updatedAt: any, owner: { __typename?: 'Organization', login: string } | { __typename?: 'User', login: string }, primaryLanguage?: { __typename?: 'Language', name: string, color?: string | null } | null } | { __typename: 'User' } | null> | null } };
 
 export type GetViewerRepositoriesQueryVariables = Exact<{
-  first: Scalars['Int']['input'];
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -31448,8 +31453,15 @@ export const RepositoryFieldsFragmentDoc = gql`
 }
     `;
 export const SearchRepositoriesDocument = gql`
-    query SearchRepositories($query: String!, $first: Int!, $after: String) {
-  search(query: $query, type: REPOSITORY, first: $first, after: $after) {
+    query SearchRepositories($query: String!, $first: Int, $last: Int, $after: String, $before: String) {
+  search(
+    query: $query
+    type: REPOSITORY
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+  ) {
     pageInfo {
       hasNextPage
       hasPreviousPage
@@ -31481,7 +31493,9 @@ export const SearchRepositoriesDocument = gql`
  *   variables: {
  *      query: // value for 'query'
  *      first: // value for 'first'
+ *      last: // value for 'last'
  *      after: // value for 'after'
+ *      before: // value for 'before'
  *   },
  * });
  */
@@ -31502,9 +31516,15 @@ export type SearchRepositoriesLazyQueryHookResult = ReturnType<typeof useSearchR
 export type SearchRepositoriesSuspenseQueryHookResult = ReturnType<typeof useSearchRepositoriesSuspenseQuery>;
 export type SearchRepositoriesQueryResult = Apollo.QueryResult<SearchRepositoriesQuery, SearchRepositoriesQueryVariables>;
 export const GetViewerRepositoriesDocument = gql`
-    query GetViewerRepositories($first: Int!) {
+    query GetViewerRepositories($first: Int, $last: Int, $after: String, $before: String) {
   viewer {
-    repositories(first: $first, orderBy: {field: UPDATED_AT, direction: DESC}) {
+    repositories(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: {field: UPDATED_AT, direction: DESC}
+    ) {
       pageInfo {
         hasNextPage
         hasPreviousPage
@@ -31532,10 +31552,13 @@ export const GetViewerRepositoriesDocument = gql`
  * const { data, loading, error } = useGetViewerRepositoriesQuery({
  *   variables: {
  *      first: // value for 'first'
+ *      last: // value for 'last'
+ *      after: // value for 'after'
+ *      before: // value for 'before'
  *   },
  * });
  */
-export function useGetViewerRepositoriesQuery(baseOptions: Apollo.QueryHookOptions<GetViewerRepositoriesQuery, GetViewerRepositoriesQueryVariables> & ({ variables: GetViewerRepositoriesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useGetViewerRepositoriesQuery(baseOptions?: Apollo.QueryHookOptions<GetViewerRepositoriesQuery, GetViewerRepositoriesQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetViewerRepositoriesQuery, GetViewerRepositoriesQueryVariables>(GetViewerRepositoriesDocument, options);
       }
