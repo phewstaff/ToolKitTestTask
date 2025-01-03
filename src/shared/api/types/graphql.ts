@@ -31425,6 +31425,14 @@ export type SearchRepositoriesQueryVariables = Exact<{
 
 export type SearchRepositoriesQuery = { __typename?: 'Query', search: { __typename?: 'SearchResultItemConnection', repositoryCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, nodes?: Array<{ __typename: 'App' } | { __typename: 'Discussion' } | { __typename: 'Issue' } | { __typename: 'MarketplaceListing' } | { __typename: 'Organization' } | { __typename: 'PullRequest' } | { __typename: 'Repository', id: string, name: string, description?: string | null, url: any, stargazerCount: number, updatedAt: any, owner: { __typename?: 'Organization', login: string } | { __typename?: 'User', login: string }, primaryLanguage?: { __typename?: 'Language', name: string, color?: string | null } | null } | { __typename: 'User' } | null> | null } };
 
+export type GetRepositoryDetailsQueryVariables = Exact<{
+  owner: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+}>;
+
+
+export type GetRepositoryDetailsQuery = { __typename?: 'Query', repository?: { __typename?: 'Repository', id: string, name: string, description?: string | null, url: any, stargazerCount: number, updatedAt: any, owner: { __typename?: 'Organization', avatarUrl: any, url: any, login: string } | { __typename?: 'User', avatarUrl: any, url: any, login: string }, languages?: { __typename?: 'LanguageConnection', nodes?: Array<{ __typename?: 'Language', name: string, color?: string | null } | null> | null } | null, primaryLanguage?: { __typename?: 'Language', name: string, color?: string | null } | null } | null };
+
 export type GetViewerRepositoriesQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
@@ -31515,6 +31523,57 @@ export type SearchRepositoriesQueryHookResult = ReturnType<typeof useSearchRepos
 export type SearchRepositoriesLazyQueryHookResult = ReturnType<typeof useSearchRepositoriesLazyQuery>;
 export type SearchRepositoriesSuspenseQueryHookResult = ReturnType<typeof useSearchRepositoriesSuspenseQuery>;
 export type SearchRepositoriesQueryResult = Apollo.QueryResult<SearchRepositoriesQuery, SearchRepositoriesQueryVariables>;
+export const GetRepositoryDetailsDocument = gql`
+    query GetRepositoryDetails($owner: String!, $name: String!) {
+  repository(owner: $owner, name: $name) {
+    ...RepositoryFields
+    owner {
+      avatarUrl
+      url
+    }
+    languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
+      nodes {
+        name
+        color
+      }
+    }
+  }
+}
+    ${RepositoryFieldsFragmentDoc}`;
+
+/**
+ * __useGetRepositoryDetailsQuery__
+ *
+ * To run a query within a React component, call `useGetRepositoryDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRepositoryDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRepositoryDetailsQuery({
+ *   variables: {
+ *      owner: // value for 'owner'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useGetRepositoryDetailsQuery(baseOptions: Apollo.QueryHookOptions<GetRepositoryDetailsQuery, GetRepositoryDetailsQueryVariables> & ({ variables: GetRepositoryDetailsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetRepositoryDetailsQuery, GetRepositoryDetailsQueryVariables>(GetRepositoryDetailsDocument, options);
+      }
+export function useGetRepositoryDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRepositoryDetailsQuery, GetRepositoryDetailsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetRepositoryDetailsQuery, GetRepositoryDetailsQueryVariables>(GetRepositoryDetailsDocument, options);
+        }
+export function useGetRepositoryDetailsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetRepositoryDetailsQuery, GetRepositoryDetailsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetRepositoryDetailsQuery, GetRepositoryDetailsQueryVariables>(GetRepositoryDetailsDocument, options);
+        }
+export type GetRepositoryDetailsQueryHookResult = ReturnType<typeof useGetRepositoryDetailsQuery>;
+export type GetRepositoryDetailsLazyQueryHookResult = ReturnType<typeof useGetRepositoryDetailsLazyQuery>;
+export type GetRepositoryDetailsSuspenseQueryHookResult = ReturnType<typeof useGetRepositoryDetailsSuspenseQuery>;
+export type GetRepositoryDetailsQueryResult = Apollo.QueryResult<GetRepositoryDetailsQuery, GetRepositoryDetailsQueryVariables>;
 export const GetViewerRepositoriesDocument = gql`
     query GetViewerRepositories($first: Int, $last: Int, $after: String, $before: String) {
   viewer {

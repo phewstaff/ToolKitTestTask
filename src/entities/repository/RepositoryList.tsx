@@ -1,5 +1,6 @@
 import { formatDistanceToNow } from 'date-fns'
 import { Star } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 import { FC } from 'react'
 
@@ -99,7 +100,10 @@ export const RepositoryList: FC = () => {
                 <S.RepositoryItem key={repo.id}>
                   <S.RepositoryItemContent>
                     <div>
-                      <S.RepositoryName href={`/repository/${repo.owner.login}/${repo.name}`}>
+                      <S.RepositoryName
+                        to={`/repository/${repo.owner.login}/${repo.name}`}
+                        as={Link}
+                      >
                         {repo.name}
                       </S.RepositoryName>
                       {repo.description && (

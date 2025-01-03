@@ -35,3 +35,22 @@ export const SEARCH_REPOSITORIES = gql`
     }
   }
 `
+
+export const GET_REPOSITORY_DETAILS = gql`
+  query GetRepositoryDetails($owner: String!, $name: String!) {
+    repository(owner: $owner, name: $name) {
+      ...RepositoryFields
+      owner {
+        avatarUrl
+        url
+      }
+      languages(first: 10, orderBy: { field: SIZE, direction: DESC }) {
+        nodes {
+          name
+          color
+        }
+      }
+    }
+  }
+  ${REPOSITORY_FRAGMENT}
+`

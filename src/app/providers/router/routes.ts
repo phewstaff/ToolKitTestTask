@@ -4,10 +4,18 @@ export type AppRoute = {
   children?: AppRoute[]
 }
 
-export type RoutesConfig = Record<keyof typeof ROUTES, AppRoute>
+export type RoutesConfig = Record<
+  keyof typeof ROUTES,
+  {
+    path: string
+    element: () => JSX.Element
+  }
+>
 
 export const ROUTES = {
   home: '/',
-  repoDetails: '/repo/:owner/:name',
+  repoDetails: '/repository/:owner/:name',
   notFound: '*',
 } as const
+
+export type AppRoutes = keyof typeof ROUTES
