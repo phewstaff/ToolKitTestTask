@@ -1,3 +1,6 @@
+import { formatDistanceToNow } from 'date-fns'
+import { Star } from 'lucide-react'
+
 import { FC } from 'react'
 
 import {
@@ -94,10 +97,33 @@ export const RepositoryList: FC = () => {
               if (!repo) return null
               return (
                 <S.RepositoryItem key={repo.id}>
-                  <S.RepositoryName href={repo.url}>{repo.name}</S.RepositoryName>
-                  {repo.description && (
-                    <S.RepositoryDescription>{repo.description}</S.RepositoryDescription>
-                  )}
+                  <S.RepositoryItemContent>
+                    <div>
+                      <S.RepositoryName href={`/repository/${repo.owner.login}/${repo.name}`}>
+                        {repo.name}
+                      </S.RepositoryName>
+                      {repo.description && (
+                        <S.RepositoryDescription>{repo.description}</S.RepositoryDescription>
+                      )}
+                    </div>
+                  </S.RepositoryItemContent>
+                  <S.RepositoryInfo>
+                    <S.StarCount>
+                      <Star size={16} />
+                      {repo.stargazerCount}
+                    </S.StarCount>
+                    <S.UpdatedAt>
+                      Updated {formatDistanceToNow(new Date(repo.updatedAt))} ago
+                    </S.UpdatedAt>
+                    <S.RepositoryName
+                      as="a"
+                      href={repo.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      GitHub ↗
+                    </S.RepositoryName>
+                  </S.RepositoryInfo>
                 </S.RepositoryItem>
               )
             })}

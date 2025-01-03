@@ -91,3 +91,29 @@ export const SkeletonText = styled(SkeletonBase)`
   width: 40%;
   border-radius: 4px;
 `
+
+export const RepositoryItemContent = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+`
+
+export const RepositoryInfo = styled.div`
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 0.5rem;
+  color: #586069;
+  font-size: 0.875rem;
+`
+
+export const StarCount = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+`
+
+export const UpdatedAt = styled.span`
+  color: #586069;
+`
