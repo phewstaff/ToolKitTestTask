@@ -1,3 +1,14 @@
 {
-  "routes": [{ "src": "/[^.]+", "dest": "/index.html" }]
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "tool-kit-test-task-sepia.vercel.app"
+        }
+      ],
+      "destination": "/index.html"
+    }
+  ]
 }
