@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "@apollo/client": "^3.12.3",
-    "@testing-library/react": "^16.1.0",
     "@trivago/prettier-plugin-sort-imports": "^5.2.0",
     "date-fns": "^4.1.0",
     "graphql": "^16.10.0",
