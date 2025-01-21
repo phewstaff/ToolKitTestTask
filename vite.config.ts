@@ -5,7 +5,6 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -15,9 +14,5 @@ export default defineConfig({
       '@shared': path.resolve(__dirname, './src/shared'),
       '@pages': path.resolve(__dirname, './src/pages'),
     },
-  },
-  server: {
-    port: 3000,
-    open: true,
   },
 })
